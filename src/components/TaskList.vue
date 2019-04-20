@@ -32,6 +32,7 @@
     :loading="loading"
     @close-form="() => showForm = false"
     @create-task="createTask"
+    @update-task="updateTask"
   />
 </div>
 </template>

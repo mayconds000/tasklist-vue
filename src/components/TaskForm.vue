@@ -25,7 +25,7 @@
                   class="button is-success" 
                   v-if="task.id != null" 
                   :disabled="!title"
-                  @click="$emit('update-task', task.id, title)"
+                  @click.prevent="$emit('update-task', task.id, title)"
                   >
                     Salvar alterações
                   </b-button>
