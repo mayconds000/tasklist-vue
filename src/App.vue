@@ -11,9 +11,6 @@ export default {
   name: 'app',
   components: {
     TaskList
-  },
-  created () {
-    this.$store.dispatch('clearErrors');
   }
 }
 </script>

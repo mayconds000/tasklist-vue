@@ -39,7 +39,9 @@
 import draggable from 'vuedraggable'
 import TaskItem from './TaskItem'
 import TaskForm from './TaskForm'
-import { mapState } from 'vuex'
+import axios from 'axios'
+
+const API_URL = 'http://127.0.0.1:8000/api/tasks'
 
 export default {
   components: {
@@ -51,16 +53,19 @@ export default {
     return {
       enabled: true,
       dragging: false,
+      loading: false,
       taskList: [],
       task: { title: '' },
       showForm: false
     }
   },
-  computed: {
-    ...mapState(['list'])
-  },
   created () {
-    this.taskList = this.list
+    axios.get(API_URL)
+      .then(response => {
+        console.log(response)
+        this.taskList = response.data || []
+      })
+      .catch (err => this.toastError(err)) 
   },
   methods: {
     editTask (task) {
@@ -72,18 +77,34 @@ export default {
       this.showForm = true
     },
     createTask (task) {
-      // send via post
-      // map result 
-      // insert in list
+      this.loading = true
+      axios.post(API_URL, task)
+        .then(response => {
+          this.taskList.push(response)
+          this.loading = false
+        })
+        .catch(err => this.toastError(err))
     },
     updateTask (task) {
-      this.taskList = this.taskList.map(item => {
-        if (task.id == item.id) item = task
-        return item
-      })
+      axios.patch(API_URL + `/${task.id}`, task)
+        .then(response => {
+          this.taskList = this.taskList.map(item => {
+            if (response.id == item.id) item = response
+            return item
+          })
+        })
+        .catch(err => this.toastError(err))
     },
     removeTask (task) {
       this.taskList = this.taskList.filter(item => item.id != task.id)
+    },
+    toastError (message) {
+      this.$toast.open({
+        duration: 5000,
+        message,
+        position: 'is-top-right',
+        type: 'is-danger'
+      })
     }
   }
 }
