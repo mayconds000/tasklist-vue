@@ -8,7 +8,7 @@
       </header>
       <section class="modal-card-body">
         <b-field label="Título">
-          <b-input v-model="title" :value="task.title || title"></b-input>
+          <b-input v-model="title" :value="task.title || title" maxlength="254"></b-input>
         </b-field>
       </section>
       <footer class="modal-card-foot">
@@ -26,9 +26,9 @@
                   v-if="task.id != null" 
                   :disabled="!title"
                   @click.prevent="$emit('update-task', task.id, title)"
-                  >
-                    Salvar alterações
-                  </b-button>
+                >
+                  Salvar alterações
+                </b-button>
                 <b-button 
                   class="button is-success" 
                   :disabled="!title"

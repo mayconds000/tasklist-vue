@@ -20,6 +20,7 @@
               :key="idx"
               @edit-task="editTask"
               @remove-task="removeTask"
+              @change-status="changeStatusTask"
             />
           </draggable>
         </nav>
@@ -69,6 +70,14 @@ export default {
       })
       .catch (err => this.toastError(err)) 
   },
+  watch: {
+    taskList: {
+      deep: true,
+      handler (newValue) {
+        // this.taskList = [...newValue]
+      }
+    }
+  },
   methods: {
     editTask (task) {
       this.task = task
@@ -106,6 +115,16 @@ export default {
       axios.delete(API_URL + `/${taskId}`)
         .then(response => {
           this.taskList = this.taskList.filter(item => item.id != taskId)
+        })
+        .catch(err => this.toastError(err))
+    },
+    changeStatusTask (task) {
+      console.log(task)
+      const newStatus = task.status == 'closed' ? 'open' : 'closed'
+      axios.patch(API_URL + `/${task.id}`, {status: newStatus})
+        .then(response => {
+          const index = this.taskList.findIndex(item => item.id == task.id)
+          this.$set(this.taskList, index, response.data)
         })
         .catch(err => this.toastError(err))
     },

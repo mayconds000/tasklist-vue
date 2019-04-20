@@ -4,7 +4,7 @@
       <div class="field">
         <b-checkbox 
           :value="item.status == 'closed'" 
-          @click.prevent.native="changeStatus(item)" 
+          @click.prevent.native="$emit('change-status', item)" 
           :class="{'has-text-line-through': item.status == 'closed'}"
         >
           <span class="is-size-5">{{ item.title }}</span>
@@ -51,11 +51,6 @@ export default {
     task (newTask) {
       this.item = {...newTask}
     }
-  },
-  methods: {
-    changeStatus (item) {
-      this.item.status = item.status == 'closed' ? 'open' : 'closed'
-    },
   }
 }
 </script>
