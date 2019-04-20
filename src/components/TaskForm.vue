@@ -17,8 +17,27 @@
           <div class="level-right">
             <div class="level-item">
               <button class="button" @click.prevent="$emit('close-form')">Cancelar</button>
-              <button class="button is-success" v-if="task.id != null">Salvar alterações</button>
-              <button class="button is-success" v-else>Adicionar Tarefa</button>
+              <template v-if="loading">
+                <button class="button is-info is-loading"></button>
+              </template>
+              <template v-else>
+                <b-button 
+                  class="button is-success" 
+                  v-if="task.id != null" 
+                  :disabled="!title"
+                  @click="$emit('update-task', task.id, title)"
+                  >
+                    Salvar alterações
+                  </b-button>
+                <b-button 
+                  class="button is-success" 
+                  :disabled="!title"
+                  @click.prevent="$emit('create-task', title)"
+                  v-else 
+                >
+                  Adicionar Tarefa
+                </b-button>
+              </template>
             </div>
           </div>
         </div>
@@ -39,6 +58,9 @@ export default {
     },
     show: {
       required: true,
+      default: false
+    },
+    loading: {
       default: false
     }
   },

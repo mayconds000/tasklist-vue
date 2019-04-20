@@ -29,7 +29,9 @@
   <task-form
     :task="task"
     :show="showForm"
+    :loading="loading"
     @close-form="() => showForm = false"
+    @create-task="createTask"
   />
 </div>
 </template>
@@ -62,7 +64,6 @@ export default {
   created () {
     axios.get(API_URL)
       .then(response => {
-        console.log(response)
         this.taskList = response.data || []
       })
       .catch (err => this.toastError(err)) 
@@ -76,27 +77,36 @@ export default {
       this.task = { title: '' }
       this.showForm = true
     },
-    createTask (task) {
+    createTask (title) {
       this.loading = true
-      axios.post(API_URL, task)
+      axios.post(API_URL, { title })
         .then(response => {
-          this.taskList.push(response)
+          this.taskList.unshift(response.data)
           this.loading = false
+          this.showForm = false
         })
         .catch(err => this.toastError(err))
     },
-    updateTask (task) {
-      axios.patch(API_URL + `/${task.id}`, task)
+    updateTask (taskId, title) {
+      this.loading = true
+      axios.patch(API_URL + `/${taskId}`, { title })
         .then(response => {
+          const task = response.data
           this.taskList = this.taskList.map(item => {
-            if (response.id == item.id) item = response
+            if (task.id == item.id) item = task
             return item
           })
+          this.loading = false
+          this.showForm = false
         })
         .catch(err => this.toastError(err))
     },
-    removeTask (task) {
-      this.taskList = this.taskList.filter(item => item.id != task.id)
+    removeTask (taskId) {
+      axios.delete(API_URL + `/${taskId}`)
+        .then(response => {
+          this.taskList = this.taskList.filter(item => item.id != taskId)
+        })
+        .catch(err => this.toastError(err))
     },
     toastError (message) {
       this.$toast.open({

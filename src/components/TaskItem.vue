@@ -21,7 +21,7 @@
         <b-button 
           icon-right="trash" 
           size="is-medium" 
-          @click="$emit('remove-task', item)" 
+          @click="$emit('remove-task', item.id)" 
         />
 
       </div>
