@@ -45,7 +45,7 @@ import TaskItem from './TaskItem'
 import TaskForm from './TaskForm'
 import axios from 'axios'
 
-const API_URL = 'http://127.0.0.1:8000/api/tasks'
+const API_URL = 'http://127.0.0.1/api/tasks'
 
 export default {
   components: {
