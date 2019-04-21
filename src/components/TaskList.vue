@@ -45,7 +45,7 @@ import TaskItem from './TaskItem'
 import TaskForm from './TaskForm'
 import axios from 'axios'
 
-const API_URL = 'http://127.0.0.1/api/tasks'
+const API_URL = 'http://localhost:8000/api/tasks'
 
 export default {
   components: {
@@ -69,14 +69,6 @@ export default {
         this.taskList = response.data || []
       })
       .catch (err => this.toastError(err)) 
-  },
-  watch: {
-    taskList: {
-      deep: true,
-      handler (newValue) {
-        // this.taskList = [...newValue]
-      }
-    }
   },
   methods: {
     editTask (task) {

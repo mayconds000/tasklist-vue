@@ -5,9 +5,10 @@
         <b-checkbox 
           :value="item.status == 'closed'" 
           @click.prevent.native="$emit('change-status', item)" 
+          class="is-size-7"
           :class="{'has-text-line-through': item.status == 'closed'}"
         >
-          <span class="is-size-5">{{ item.title }}</span>
+          <span >{{ item.title }}</span>
         </b-checkbox>
       </div>
     </div>
@@ -15,12 +16,12 @@
       <div class="buttons is-pulled-right" >
         <b-button 
           icon-right="edit" 
-          size="is-medium" 
+          size="is-small" 
           @click="$emit('edit-task', item)" 
         />
         <b-button 
           icon-right="trash" 
-          size="is-medium" 
+          size="is-small" 
           @click="$emit('remove-task', item.id)" 
         />
 
